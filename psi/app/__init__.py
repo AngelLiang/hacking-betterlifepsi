@@ -40,7 +40,9 @@ def debug(sig, frame):
 
 
 def listen():
-    signal.signal(signal.SIGUSR1, debug)  # Register handler
+    import platform
+    if platform.system() != 'Windows':
+        signal.signal(signal.SIGUSR1, debug)  # Register handler
 
 
 listen()

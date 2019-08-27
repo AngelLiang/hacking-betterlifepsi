@@ -23,6 +23,7 @@ class Organization(db.Model, DataSecurityMixin):
     description = db.Column(db.String(255))
     lft = db.Column(Integer, unique=True, nullable=False, default=0)
     rgt = db.Column(Integer, unique=True, nullable=False, default=0)
+    # 类型
     type_id = db.Column(Integer, db.ForeignKey('enum_values.id'), nullable=False)
     type = relationship('EnumValues', foreign_keys=[type_id])
 

@@ -9,6 +9,7 @@ from psi.app.models.data_security_mixin import DataSecurityMixin
 
 db = Info.get_db()
 
+# 角色与用户的关系表
 roles_users = db.Table('roles_users',
                        db.Column('id', db.Integer(), primary_key=True),
                        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
@@ -20,8 +21,10 @@ class Role(db.Model, RoleMixin, DataSecurityMixin):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
+    # 父级角色
     parent_id = db.Column(Integer, ForeignKey('role.id'))
     parent = relationship('Role', remote_side=id, backref=backref('sub_roles', lazy='joined'))
+    # 系统角色
     is_system = db.Column(db.Boolean, default=False, nullable=False)
 
     def __unicode__(self):

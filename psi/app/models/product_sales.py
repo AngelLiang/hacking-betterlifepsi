@@ -35,6 +35,7 @@ class ProductSales(Product, ReportBaseModel):
 
     @hybrid_property
     def sales_profit_percentage(self):
+        """混合属性"""
         percentage = self.sales_profit/self.get_all_profit()
         return percentage
 

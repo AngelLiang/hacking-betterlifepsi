@@ -22,10 +22,13 @@ class User(db.Model, UserMixin, DataSecurityMixin):
     active = db.Column(db.Boolean(), default=True)
     locale_id = db.Column(Integer, ForeignKey('enum_values.id'))
     locale = relationship('EnumValues', foreign_keys=[locale_id])
+    # 时区
     timezone_id = db.Column(Integer, ForeignKey('enum_values.id'))
     timezone = relationship('EnumValues', foreign_keys=[timezone_id])
+    # 组织
     organization_id = db.Column(Integer, ForeignKey('organization.id'))
     organization = relationship('Organization', foreign_keys=[organization_id])
+    # 角色
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='joined'))
 

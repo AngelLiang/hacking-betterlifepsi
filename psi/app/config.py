@@ -10,16 +10,21 @@ from psi.app.thirdparty.cloudinary_image_store import CloudinaryImageStore
 class BaseConfig(object):
     BABEL_DEFAULT_LOCALE = 'en_US'
     BABEL_DEFAULT_TIMEZONE = 'CST'
+
+    # SQLALCHEMY
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    # SECURITY
     SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
     SECURITY_PASSWORD_SALT = os.environ.get('SECURITY_PASSWORD_SALT')
     SECURITY_REGISTERABLE = False
     SECURITY_CONFIRMABLE = False
     SECURITY_RECOVERABLE = False
     SECURITY_CHANGEABLE = False
+
     DEBUG = (os.environ.get('DEBUG') == "True")
     TESTING = (os.environ.get('TESTING') == "True")
     DEBUG_TB_INTERCEPT_REDIRECTS = False

@@ -17,6 +17,7 @@ db = Info.get_db()
 
 
 class ProductImage(db.Model, DataSecurityMixin):
+    """产品图片"""
     __tablename__ = 'product_image'
     id = Column(Integer, primary_key=True)
     product_id = Column(Integer, ForeignKey('product.id'), nullable=False)

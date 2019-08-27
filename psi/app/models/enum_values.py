@@ -10,11 +10,16 @@ db = Info.get_db()
 
 
 class EnumValues(db.Model, DataSecurityMixin):
+    """枚举值"""
+
     __tablename__ = 'enum_values'
     id = Column(Integer, primary_key=True)
+    
+    # 自关联
     type_id = Column(Integer, ForeignKey('enum_values.id'))
     type = relationship('EnumValues', remote_side=id,
                         backref=backref('type_values', lazy='joined'))
+    # 编码
     code = Column(String(32), unique=True, nullable=False)
     display = Column(String(64), nullable=False)
 

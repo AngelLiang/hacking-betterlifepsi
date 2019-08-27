@@ -73,6 +73,9 @@ class ModelViewWithAccess(ModelView):
         return self.model.__tablename__
 
     def can(self, operation='view'):
+        """
+        :param operation:
+        """
         obj_id = get_mdict_item_or_list(request.args, 'id') if has_request_context() else None
         obj = None if obj_id is None else self.get_one(obj_id)
         if obj is None:
@@ -115,10 +118,12 @@ class ModelViewWithAccess(ModelView):
             if is_created:
                 model.organization = current_user.organization
             elif model.organization != current_user.organization:
+                # wtforms.ValidationError
                 ValidationError(gettext('You are not allowed to change this record'))
 
     def on_model_delete(self, model):
         if has_organization_field(model) and model.organization != current_user.organization:
+            # wtforms.ValidationError
             ValidationError(gettext('You are not allowed to delete this record'))
 
     def _handle_view(self, name, **kwargs):
