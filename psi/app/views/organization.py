@@ -73,6 +73,7 @@ class OrganizationAdmin(ModelViewWithAccess):
 
     form_excluded_columns = ('lft', 'rgt',)
 
+    # 表单额外字段
     form_extra_fields = {
         'parent': QuerySelectField(
             label=lazy_gettext('Parent Organization'),
@@ -86,7 +87,7 @@ class OrganizationAdmin(ModelViewWithAccess):
         form = super(OrganizationAdmin, self).edit_form(obj)
         # form.parent._data_list is None at this moment, so it's not feasible to change the _data_list attribute directly here
         # to set the query_factory function is the right way to implement a filter.
-        form.parent.query_factory = partial(Organization.children_remover, obj)
+        form.parent.query_factory = partial(Organization.children_remover, obj)  # 覆写该字段
         # For root organization, allow blank
         if is_root_organization(obj):
             form.parent.allow_blank = True

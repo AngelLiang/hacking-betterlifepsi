@@ -21,8 +21,10 @@ class Organization(db.Model, DataSecurityMixin):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
+
     lft = db.Column(Integer, unique=True, nullable=False, default=0)
     rgt = db.Column(Integer, unique=True, nullable=False, default=0)
+
     # 类型
     type_id = db.Column(Integer, db.ForeignKey('enum_values.id'), nullable=False)
     type = relationship('EnumValues', foreign_keys=[type_id])
@@ -30,19 +32,26 @@ class Organization(db.Model, DataSecurityMixin):
 
     @staticmethod
     def type_filter():
+        """类型过滤器"""
         from psi.app.models.enum_values import EnumValues
         from psi.app.const import ORGANIZATION_TYPE_KEY
         return EnumValues.type_filter(ORGANIZATION_TYPE_KEY)
 
 
-    @hybrid_property
+    @hybrid_property  # 混合属性
     def parent(self):
+        """获取上级"""
+        # lft 和 rgt 都设置了 nullable=False
         if self.lft is None or self.rgt is None:
             return None
         return db.session.query(Organization).filter(and_(Organization.lft < self.lft, Organization.rgt > self.rgt)).order_by(desc(Organization.lft)).first()
 
     @parent.setter
     def parent(self, value):
+        """设置上级
+        
+        :param value: Organization
+        """
         from sqlalchemy import text
         from psi.app.utils import db_util
         if value is not None:
@@ -51,8 +60,8 @@ class Organization(db.Model, DataSecurityMixin):
                 '{u} rgt = rgt + 2 WHERE rgt > {val};{u} lft = lft + 2 WHERE '
                 'lft > {val}'.format(val=max_lft, u=self.uos))
             # set left and right of the new object
-            self.lft = max_lft + 1
-            self.rgt = max_lft + 2
+            self.lft = max_lft + 1  # why?
+            self.rgt = max_lft + 2  # why?
             db.engine.execute(sql)
             db_util.save_objects_commit(self)
 
@@ -201,6 +210,7 @@ class Organization(db.Model, DataSecurityMixin):
 
     @staticmethod
     def children_remover(organization):
+        """移除子组织"""
         all_org = db.session.query(Organization).all()
         orgs = [org for org in all_org if (org not in organization.all_children and org != organization)]
         return [org for org in orgs if (org in current_user.organization.all_children or org == current_user.organization)]

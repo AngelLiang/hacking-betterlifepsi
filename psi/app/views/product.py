@@ -42,20 +42,21 @@ class ProductAdmin(ModelViewWithAccess):
         'in_transit_quantity': lazy_gettext('In Transit Quantity'),
         'need_advice': lazy_gettext('Need Running Advice'),
         'external_id': lazy_gettext('External Id'),
-        'images_placeholder': lazy_gettext('Product Images'),
+        'images_placeholder': lazy_gettext('Product Images'),  # 产品图片
     }
 
     form_extra_fields = {
         'available_quantity': DisabledStringField(label=lazy_gettext('Available Quantity')),
         'in_transit_quantity': DisabledStringField(label=lazy_gettext('In Transit Quantity')),
-        'images_placeholder': ImageField(label=lazy_gettext('Product Images')),
+        'images_placeholder': ImageField(label=lazy_gettext('Product Images')),  # 表单额外的字段
         'gross_profit_rate': DisabledStringField(label=lazy_gettext('Gross Profit Rate')),
     }
 
+    # 格式化
     column_formatters = {
         'supplier': supplier_formatter,
         'distinguishing_feature': rich_text_formatter,
-        'images_placeholder': images_formatter,
+        'images_placeholder': images_formatter,  # 图片格式化
     }
 
     form_overrides = dict(distinguishing_feature=CKTextAreaField,

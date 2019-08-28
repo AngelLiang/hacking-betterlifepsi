@@ -43,16 +43,19 @@ class ImageField(StringField):
         if len(images_to_del) > 0:
             to_del_ids = images_to_del.split(',')
             for to_del_id in to_del_ids:
+                # TODO:
                 db_util.delete_by_id(self.object_type, to_del_id, commit=False)
         files = request.files.getlist('images_placeholder')
-        images = getattr(obj, name)
+        images = getattr(obj, name)  # 获取对象的属性
         for f in files:
             if len(f.filename) > 0:
+                # TODO:
                 image_owner = self.object_type()
                 image = file_util.save_image(image_owner, f)
                 Info.get_db().session.add(image)
                 Info.get_db().session.add(image_owner)
                 images.append(image_owner)
+
         setattr(obj, name, images)
 
 

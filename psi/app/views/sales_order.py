@@ -1,4 +1,8 @@
 # coding=utf-8
+"""
+销售单
+"""
+
 from datetime import datetime
 from functools import partial
 

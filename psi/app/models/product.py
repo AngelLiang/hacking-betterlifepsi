@@ -17,12 +17,14 @@ db = Info.get_db()
 
 
 class ProductImage(db.Model, DataSecurityMixin):
-    """产品图片"""
+    """产品和图片的关联表"""
     __tablename__ = 'product_image'
     id = Column(Integer, primary_key=True)
+
     product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
     # The product image need to be delete when a product got deleted
     product = relationship('Product', backref=backref('images', cascade='all, delete'))
+
     image_id = Column(Integer, ForeignKey('image.id'), nullable=False)
     # The image need to be delete when a product image got deleted
     image = relationship('Image', cascade="all, delete")
@@ -37,15 +39,18 @@ class Product(db.Model, DataSecurityMixin):
     lead_day = Column(Integer, nullable=False)
     distinguishing_feature = Column(Text)
     spec_link = Column(String(128))
+    # 价格
     purchase_price = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
     retail_price = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
     franchise_price = Column(Numeric(precision=8, scale=2,
                                      decimal_return_scale=2), nullable=True)
+    # 分类
     category_id = Column(Integer, ForeignKey('product_category.id'), nullable=False)
     category = relationship('ProductCategory', backref=backref('products', lazy='joined'))
     supplier_id = Column(Integer, ForeignKey('supplier.id'), nullable=False)
     supplier = relationship('Supplier', backref=backref('products', lazy='dynamic'))
     need_advice = Column(Boolean)
+    # 组织
     organization_id = db.Column(Integer, ForeignKey('organization.id'))
     organization = relationship('Organization', foreign_keys=[organization_id])
 
