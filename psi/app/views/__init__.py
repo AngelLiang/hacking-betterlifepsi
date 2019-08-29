@@ -42,6 +42,7 @@ def init_admin_views(app, db):
         base_template='layout.html',
         template_mode='bootstrap3'
     )
+    # 直接采购单
     admin_views.add_view(DirectPurchaseOrderAdmin(
         PurchaseOrder,
         db_session,
@@ -51,6 +52,7 @@ def init_admin_views(app, db):
         menu_icon_value='glyphicon-shopping-cart',
         endpoint='dpo')
     )
+    # 加盟店采购单
     admin_views.add_view(FranchisePurchaseOrderAdmin(
         PurchaseOrder,
         db_session,
@@ -60,6 +62,7 @@ def init_admin_views(app, db):
         menu_icon_value='glyphicon-shopping-cart',
         endpoint='fpo')
     )
+    # 收货
     admin_views.add_view(ReceivingAdmin(
         Receiving,
         db_session,
@@ -68,6 +71,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-import')
     )
+    # 供应商
     admin_views.add_view(SupplierAdmin(
         Supplier,
         db_session,
@@ -77,6 +81,7 @@ def init_admin_views(app, db):
         menu_icon_value='glyphicon-globe')
     )
 
+    # 销售单
     admin_views.add_view(SalesOrderAdmin(
         SalesOrder,
         db_session,
@@ -85,6 +90,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-send')
     )
+    # 发货
     admin_views.add_view(ShippingAdmin(
         Shipping,
         db_session,
@@ -93,6 +99,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-export')
     )
+    # 会员
     admin_views.add_view(CustomerAdmin(
         Customer,
         db_session,
@@ -101,6 +108,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-user')
     )
+    # 运营建议
     admin_views.add_view(ProductInventoryView(
         ProductInventory,
         db_session,
@@ -110,6 +118,7 @@ def init_admin_views(app, db):
         menu_icon_value='glyphicon-piggy-bank',
         endpoint='product_inventory')
     )
+    # 支出
     admin_views.add_view(ExpenseAdmin(
         Expense,
         db_session,
@@ -118,6 +127,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-minus-sign')
     )
+    # 收入
     admin_views.add_view(IncomingAdmin(
         Incoming,
         db_session,
@@ -127,6 +137,7 @@ def init_admin_views(app, db):
         menu_icon_value='glyphicon-usd')
     )
 
+    # 商品
     admin_views.add_view(ProductAdmin(
         Product,
         db_session,
@@ -135,6 +146,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-barcode')
     )
+    # 商品分类
     admin_views.add_view(ProductCategoryAdmin(
         ProductCategory,
         db_session,
@@ -143,6 +155,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-tags')
     )
+    # 库存调整
     admin_views.add_view(InventoryTransactionAdmin(
         InventoryTransaction,
         db_session,
@@ -151,6 +164,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-transfer')
     )
+    # 库存调整
     admin_views.add_view(ImportStoreDataView(
         name=lazy_gettext("Import Store Data"),
         category=lazy_gettext('Master Data'),
@@ -158,6 +172,8 @@ def init_admin_views(app, db):
         menu_icon_value='glyphicon-shopping-cart',
         endpoint='import_store_data')
     )
+
+    # 报表
     admin_views.add_view(ReportView(
         name=lazy_gettext('Sales Amount Report'),
         category=lazy_gettext("Report"),
@@ -192,6 +208,8 @@ def init_admin_views(app, db):
         menu_icon_value='fa fa-bar-chart',
         endpoint='product_sales_report')
     )
+
+    # 用户帐号
     admin_views.add_view(UserAdmin(
         User,
         db_session,
@@ -200,6 +218,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-user')
     )
+    # 角色
     admin_views.add_view(RoleAdmin(
         Role,
         db_session,
@@ -208,6 +227,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-eye-close')
     )
+    # 组织
     admin_views.add_view(OrganizationAdmin(
         Organization,
         db_session,
@@ -216,6 +236,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-user')
     )
+    # 枚举变量值
     admin_views.add_view(EnumValuesAdmin(
         EnumValues,
         db_session,

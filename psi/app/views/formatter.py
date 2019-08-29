@@ -74,6 +74,7 @@ def _obj_formatter_str(view, context, model, value=None, model_name=None, title=
                 val = str(boolean_formatter(getattr(detail_line_val, detail_key['field'])))
                 line_vals.append(val)
             detail_lines.append(line_vals)
+    # 返回 object_ref 引用模板
     return render_template('components/object_ref.html',
                            title = title, value = value, endpoint=endpoint,
                            header = header, detail_labels = detail_labels,

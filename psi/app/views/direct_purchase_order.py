@@ -12,6 +12,7 @@ from psi.app.views.base import DeleteValidator
 
 
 class DirectPurchaseOrderAdmin(BasePurchaseOrderAdmin, DeleteValidator):
+    """直接采购单"""
 
     type_code = const.DIRECT_PO_TYPE_KEY
 

@@ -40,7 +40,9 @@ class BaseConfig(object):
     BUILDER_URL_PREFIX = 'https://travis-ci.com/betterlife/betterlifepsi/builds'
     GIT_URL_PREFIX = 'https://github.com/betterlife/betterlifepsi/commit'
     IMAGE_ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    # 绝对路径
     abs_path = os.path.dirname(os.path.abspath(__file__))
+    # 上传文件路径
     UPLOAD_FOLDER = os.path.join(abs_path, ".." ,"static", "uploaded")
     NEED_ADVICE_UPDATE_SECONDS = 2*60 # IN Seconds
 
