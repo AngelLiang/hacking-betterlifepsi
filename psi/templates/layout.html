@@ -3,8 +3,10 @@
 
 {% block head_tail %}
   {{ super() }}
+  {# 一些通用的css，包含图片上传的样式 #}
   <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='images/favicon.ico') }}" rel="icon" type="image/x-icon">
+  {# jQuery点击图片弹出放大预览 Lightbox插件 #}
   <link href="{{ url_for('static', filename='lightbox2/css/lightbox.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='Font-Awesome-4.6.3/css/font-awesome.min.css') }}" rel="stylesheet">
 {% endblock %}
@@ -12,10 +14,15 @@
 {% block tail %}
   <div id="system-info"> © 2015-2016 BETTERLIFE.IO | {{render_version() | safe}}</div>
   {{ super() }}
+  {# ckeditor #}
   <script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
+  {# jQuery点击图片弹出放大预览 Lightbox插件 #}
   <script src="{{ url_for('static', filename='lightbox2/js/lightbox.min.js') }}"></script>
+  {# Bootbox.js 是一个小型的JavaScript库，基于Bootstrap模态框开发，用于创建可编程的对话框。 #}
   <script src="{{ url_for('static', filename='bootbox/bootbox.min.js') }}"></script>
+  {# 有关list页面中弹出另一个表的详情的代码 #}
   <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  {# 图片上传 #}
   <script src="{{ url_for('static', filename='js/image_upload.js') }}"></script>
   <script>
     {% if current_user.is_authenticated %}

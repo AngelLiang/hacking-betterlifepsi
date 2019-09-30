@@ -48,7 +48,7 @@ class ProductAdmin(ModelViewWithAccess):
     form_extra_fields = {
         'available_quantity': DisabledStringField(label=lazy_gettext('Available Quantity')),
         'in_transit_quantity': DisabledStringField(label=lazy_gettext('In Transit Quantity')),
-        'images_placeholder': ImageField(label=lazy_gettext('Product Images')),  # 表单额外的字段
+        'images_placeholder': ImageField(label=lazy_gettext('Product Images')),  # 图片额外的字段
         'gross_profit_rate': DisabledStringField(label=lazy_gettext('Gross Profit Rate')),
     }
 

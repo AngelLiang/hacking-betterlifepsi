@@ -17,6 +17,7 @@ $('body').on('click', '.inline-remove-field' , function(e) {
     }
 });
 
+// 添加行列字段
 function addInlineField(parent_id) {
     parent = $("#" + parent_id);
     inline_lines_tr = parent.find(".inline-field");
