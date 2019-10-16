@@ -15,11 +15,16 @@ class User(db.Model, UserMixin, DataSecurityMixin):
 
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
+    # 登录名
     login = db.Column(db.String(64), unique=True, nullable=False)
+    # 显示名
     display = db.Column(db.String(255), nullable=False)
+    # 邮箱
     email = db.Column(db.String(255), unique=True, nullable=False)
+    # 密码
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean(), default=True)
+    # 地区
     locale_id = db.Column(Integer, ForeignKey('enum_values.id'))
     locale = relationship('EnumValues', foreign_keys=[locale_id])
     # 时区

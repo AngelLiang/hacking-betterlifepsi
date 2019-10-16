@@ -39,16 +39,20 @@ class Product(db.Model, DataSecurityMixin):
     lead_day = Column(Integer, nullable=False)
     distinguishing_feature = Column(Text)
     spec_link = Column(String(128))
-    # 价格
+    # 进货价
     purchase_price = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
+    # 零售价
     retail_price = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
+    # 拿货价
     franchise_price = Column(Numeric(precision=8, scale=2,
                                      decimal_return_scale=2), nullable=True)
     # 分类
     category_id = Column(Integer, ForeignKey('product_category.id'), nullable=False)
     category = relationship('ProductCategory', backref=backref('products', lazy='joined'))
+    # 供应商
     supplier_id = Column(Integer, ForeignKey('supplier.id'), nullable=False)
     supplier = relationship('Supplier', backref=backref('products', lazy='dynamic'))
+    # 需要建议
     need_advice = Column(Boolean)
     # 组织
     organization_id = db.Column(Integer, ForeignKey('organization.id'))
@@ -123,10 +127,12 @@ class Product(db.Model, DataSecurityMixin):
 
     @staticmethod
     def supplier_filter(s_id):
+        """供应商过滤"""
         return Info.get_db().session.query(Product).filter_by(supplier_id=s_id)
 
     @staticmethod
     def organization_filter(o_id):
+        """组织过滤"""
         return Info.get_db().session.query(Product).filter_by(organization_id=o_id)
 
     def get_lead_deliver_day(self):
