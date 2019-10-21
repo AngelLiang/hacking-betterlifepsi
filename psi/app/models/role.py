@@ -17,6 +17,10 @@ roles_users = db.Table('roles_users',
 
 
 class Role(db.Model, RoleMixin, DataSecurityMixin):
+    """角色模型
+
+    使用角色模型作为权限模型
+    """
     __tablename__ = 'role'
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)

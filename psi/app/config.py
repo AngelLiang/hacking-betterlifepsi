@@ -47,12 +47,19 @@ class BaseConfig(object):
     NEED_ADVICE_UPDATE_SECONDS = 2*60 # IN Seconds
 
     security_messages = {
+        # 密码不匹配
         'PASSWORD_MISMATCH': (lazy_gettext('Password does not match'), 'error'),
+        # 禁用的帐号
         'DISABLED_ACCOUNT': (lazy_gettext('Account is disabled'), 'error'),
+        # 邮箱没提供
         'EMAIL_NOT_PROVIDED': (lazy_gettext('Email not provided'), 'error'),
+        # 无效的邮箱地址
         'INVALID_EMAIL_ADDRESS': (lazy_gettext('Invalid email address'), 'error'),
+        # 密码没提供
         'PASSWORD_NOT_PROVIDED': (lazy_gettext('Password not provided'), 'error'),
+        # 无效的密码
         'INVALID_PASSWORD': (lazy_gettext('Invalid password'), 'error'),
+        # 用户不存在
         'USER_DOES_NOT_EXIST': (lazy_gettext('Specified user does not exist'), 'error'),
     }
 
