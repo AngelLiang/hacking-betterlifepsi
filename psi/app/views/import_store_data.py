@@ -202,6 +202,7 @@ class ImportStoreDataView(BaseView):
     @login_required
     @has_role('import_store_data')
     def index(self):
+        """导入店铺运营数据"""
         if request.method == 'GET':
             return self.render('data_loading/legacy.html')
         elif request.method == 'POST':
@@ -213,7 +214,8 @@ class ImportStoreDataView(BaseView):
                 if len(filename) == 0:
                     filename = str(uuid.uuid4())
                 full_path = os.path.join(current_app.config['UPLOAD_TMP_FOLDER'], filename)
-                csv_file.save(full_path)
+                csv_file.save(full_path)  # 保存文件
+
                 with codecs.open(full_path, 'rb', 'UTF-8') as f:
                     reader = csv.reader(f, delimiter=',')
                     line, imported_line = 0,0
