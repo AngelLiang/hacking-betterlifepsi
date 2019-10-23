@@ -164,7 +164,7 @@ def init_admin_views(app, db):
         menu_icon_type=ICON_TYPE_GLYPH,
         menu_icon_value='glyphicon-transfer')
     )
-    # 库存调整
+    # 导入店铺运营数据
     admin_views.add_view(ImportStoreDataView(
         name=lazy_gettext("Import Store Data"),
         category=lazy_gettext('Master Data'),
