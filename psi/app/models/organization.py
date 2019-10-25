@@ -22,8 +22,9 @@ class Organization(db.Model, DataSecurityMixin):
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
-    lft = db.Column(Integer, unique=True, nullable=False, default=0)
-    rgt = db.Column(Integer, unique=True, nullable=False, default=0)
+    # 应该是使用了 预排序树 数据结构
+    lft = db.Column(Integer, unique=True, nullable=False, default=0)  # 左值
+    rgt = db.Column(Integer, unique=True, nullable=False, default=0)  # 右值
 
     # 类型
     type_id = db.Column(Integer, db.ForeignKey('enum_values.id'), nullable=False)
@@ -56,12 +57,15 @@ class Organization(db.Model, DataSecurityMixin):
         from psi.app.utils import db_util
         if value is not None:
             max_lft = value.rgt - 1
+            # 隐式更新所有受影响的节点
+            # 大于父类右值的所有左值，+2
+            # 大于等于父类右值的所有右值，+2
             sql = text(
                 '{u} rgt = rgt + 2 WHERE rgt > {val};{u} lft = lft + 2 WHERE '
                 'lft > {val}'.format(val=max_lft, u=self.uos))
             # set left and right of the new object
-            self.lft = max_lft + 1  # why?
-            self.rgt = max_lft + 2  # why?
+            self.lft = max_lft + 1  
+            self.rgt = max_lft + 2  
             db.engine.execute(sql)
             db_util.save_objects_commit(self)
 
