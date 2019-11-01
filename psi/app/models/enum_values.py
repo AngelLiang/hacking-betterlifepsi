@@ -10,7 +10,11 @@ db = Info.get_db()
 
 
 class EnumValues(db.Model, DataSecurityMixin):
-    """枚举值"""
+    """枚举值
+
+    也叫域值表
+    参考资料：数据库设计解决方案入门经典 8.4 章节
+    """
 
     __tablename__ = 'enum_values'
     id = Column(Integer, primary_key=True)
@@ -21,6 +25,7 @@ class EnumValues(db.Model, DataSecurityMixin):
                         backref=backref('type_values', lazy='joined'))
     # 编码
     code = Column(String(32), unique=True, nullable=False)
+    # 显示名称
     display = Column(String(64), nullable=False)
 
     @staticmethod
