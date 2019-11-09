@@ -74,7 +74,7 @@ class ModelViewWithAccess(ModelView):
 
     def can(self, operation='view'):
         """
-        :param operation:
+        :param operation: str, 操作
         """
         obj_id = get_mdict_item_or_list(request.args, 'id') if has_request_context() else None
         obj = None if obj_id is None else self.get_one(obj_id)
@@ -102,12 +102,14 @@ class ModelViewWithAccess(ModelView):
         return super(ModelViewWithAccess, self).handle_view_exception(exc)
 
     def get_query(self):
+        """override"""
         if has_organization_field(self.model):
             return self.session.query(self.model).filter(self.model.organization == current_user.organization)
         else:
             return super(ModelViewWithAccess, self).get_query()
 
     def get_count_query(self):
+        """override"""
         if has_organization_field(self.model):
             return self.session.query(func.count('*')).filter(self.model.organization == current_user.organization)
         else:
