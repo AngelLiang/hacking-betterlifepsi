@@ -159,6 +159,7 @@
     <h3>{{ text }}</h3>
 {% endmacro %}
 
+{# 比 flask-admin 原始的 lib.html 多加了这个 #}
 {% macro render_header_fields_panel(head_class, form, form_opts) %}
     <div class="{{ head_class }}" id="header-field-panel">
         <div class="panel panel-default">
@@ -178,6 +179,7 @@
     </div>
 {% endmacro %}
 
+{# 比 flask-admin 原始的 lib.html 多加了这个 #}
 {% macro render_inline_fields_panel(detail_class, form, field, direct_error, kwargs) %}
     <div class="{{ detail_class }}" id="inline-field-panel">
         {% for field in form if is_inline_field(field) %}
@@ -215,6 +217,7 @@
     {% endif %}
 
     {% if form_opts and form_opts.form_rules %}
+        {# 设置 head 和 detail 的 class #}
         {% if has_detail %}
             {% set head_class="col-md-4" %}
             {% set detail_class="col-md-8" %}
@@ -222,17 +225,20 @@
             {% set head_class="col-md-12" %}
             {% set head_class="col-md-0" %}
         {% endif %}
+        {# has_detail #}
         {% if has_detail %}
             {{ render_header_fields_panel(head_class, form, form_opts)  }}
             <div class="header-expand-button" id="header-field-panel-expand-icon"></div>
             {{ render_inline_fields_panel(detail_class, form, field, direct_error, kwargs) }}
             <div class="inline-expand-button" id="inline-field-panel-expand-icon"></div>
         {% else %}
+            {# 正常渲染：只渲染 form_rules 的字段 #}
             {% for r in form_opts.form_rules %}
                 {{ r(form, form_opts=form_opts) }}
             {% endfor %}
         {% endif %}
     {% else %}
+        {# 正常渲染 #}
         {% for f in form if f.widget.input_type != 'hidden' %}
           {% if form_opts %}
             {% set kwargs = form_opts.widget_args.get(f.short_name, {}) %}
@@ -244,6 +250,7 @@
     {% endif %}
 {% endmacro %}
 
+{# 比 flask-admin 原始的 lib.html 多加了这个 #}
 {% macro render_inline_field(form, field, kwargs={}, caller=None) %}
   {% set direct_error = h.is_field_error(field.errors) %}
 
@@ -265,6 +272,7 @@
     {% endif %}
 {% endmacro %}
 
+{# 比 flask-admin 原始的 lib.html 多加了这个 #}
 {% macro render_inline_form_fields(form, form_opts=None) %}
     {% if form.hidden_tag is defined %}
         {{ form.hidden_tag() }}
@@ -299,6 +307,7 @@
     </form>
 {% endmacro %}
 
+{# 比 flask-admin 的 lib.html 多加了 has_detail #}
 {% macro render_form_buttons(cancel_url, extra=None, is_modal=False, has_detail=False) %}
     <hr>
     <div class="form-group">
@@ -321,7 +330,7 @@
 
 {% macro render_form(form, cancel_url, extra=None, form_opts=None, action=None, is_modal=False) -%}
     {% call form_tag(action=action) %}
-        {% set has_detail = has_detail_field(form) %}
+        {% set has_detail = has_detail_field(form) %}  {# 是否有 detail_field #}
         {{ render_form_fields(form, form_opts=form_opts, has_detail=has_detail) }}
         {{ render_form_buttons(cancel_url, extra, is_modal, has_detail=has_detail) }}
     {% endcall %}
