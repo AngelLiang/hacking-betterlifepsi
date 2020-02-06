@@ -24,10 +24,12 @@ class DirectPurchaseOrderAdmin(BasePurchaseOrderAdmin, DeleteValidator):
                    'goods_amount', 'total_amount', 'status', 'all_expenses',
                    'all_receivings', 'remark')
 
+    # form_columns 有 lines
     form_columns = ('supplier', 'transient_supplier', 'status',
                     'logistic_amount', 'order_date','goods_amount',
                     'total_amount', 'remark', 'lines')
 
+    # form_edit_rules 有 lines
     form_edit_rules = ('transient_supplier', 'status', 'logistic_amount',
                        'order_date','goods_amount', 'total_amount',
                        'remark', 'lines')
@@ -47,6 +49,7 @@ class DirectPurchaseOrderAdmin(BasePurchaseOrderAdmin, DeleteValidator):
                             'goods_amount', 'order_date',
                             ('supplier', 'supplier.id'),)
 
+    # column_details_list 有 lines
     column_details_list = ('id', 'supplier', 'status', 'logistic_amount',
                            'order_date', 'goods_amount','total_amount',
                            'remark', 'lines', 'all_expenses', 'all_receivings')
@@ -60,6 +63,7 @@ class DirectPurchaseOrderAdmin(BasePurchaseOrderAdmin, DeleteValidator):
         return tuple(sl)
 
     def edit_form(self, obj=None):
+        """编辑表单"""
         form = super(DirectPurchaseOrderAdmin, self).edit_form(obj)
         supplier_id = obj.transient_supplier.id
         # Set query_factory for newly added line
@@ -91,8 +95,10 @@ class DirectPurchaseOrderAdmin(BasePurchaseOrderAdmin, DeleteValidator):
         return form
 
     def create_form(self, obj=None):
+        """创建表单"""
         from psi.app.models import Supplier
         form = super(DirectPurchaseOrderAdmin, self).create_form(obj)
+        # 重写 form.status.query 选项
         form.status.query = [EnumValues.get(const.PO_DRAFT_STATUS_KEY), ]
         form_util.filter_by_organization(form.supplier, Supplier)
         return form
