@@ -9,6 +9,7 @@ db = Info.get_db()
 
 
 class ProductCategory(db.Model, DataSecurityMixin):
+    """产品分类"""
     __tablename__ = 'product_category'
     id = Column(Integer, primary_key=True)
     code = Column(String(8), unique=True, nullable=False)

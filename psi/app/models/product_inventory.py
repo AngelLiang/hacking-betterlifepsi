@@ -10,7 +10,7 @@ from psi.app.utils import format_decimal, get_weeks_between
 db = Info.get_db()
 
 class ProductInventory(Product):
-
+    """产品库存"""
     @hybrid_property
     def inventory_advice(self):
         from psi.app.advice import InventoryAdvice

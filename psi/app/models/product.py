@@ -31,6 +31,7 @@ class ProductImage(db.Model, DataSecurityMixin):
 
 
 class Product(db.Model, DataSecurityMixin):
+    """产品"""
     __tablename__ = 'product'
     id = Column(Integer, primary_key=True)
     name = Column(String(128), unique=False, nullable=False)

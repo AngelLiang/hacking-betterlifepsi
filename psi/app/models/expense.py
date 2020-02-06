@@ -10,6 +10,7 @@ db = Info.get_db()
 
 
 class Expense(db.Model, DataSecurityMixin):
+    """支出"""
     __tablename__ = 'expense'
     id = Column(Integer, primary_key=True)
     date = Column(DateTime, nullable=False)

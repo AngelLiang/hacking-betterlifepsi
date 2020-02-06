@@ -15,6 +15,7 @@ db = Info.get_db()
 
 
 class SalesOrder(db.Model, DataSecurityMixin):
+    """销售订单"""
     __tablename__ = 'sales_order'
     id = Column(Integer, primary_key=True)
     logistic_amount = Column(Numeric(precision=8, scale=2, decimal_return_scale=2))
