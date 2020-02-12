@@ -17,20 +17,25 @@ db = Info.get_db()
 
 
 class Receiving(db.Model, DataSecurityMixin):
+    """收货单"""
     __tablename__ = 'receiving'
     id = Column(Integer, primary_key=True)
     date = Column(DateTime, nullable=False)
     remark = Column(Text)
 
+    # 状态
     status_id = Column(Integer, ForeignKey('enum_values.id'), nullable=False)
     status = relationship('EnumValues', foreign_keys=[status_id])
 
+    # 订购单
     purchase_order_id = Column(Integer, ForeignKey('purchase_order.id'), nullable=False)
     purchase_order = relationship('PurchaseOrder', backref=backref('po_receivings', uselist=True, ))
 
+    # 库存变动
     inventory_transaction_id = Column(Integer, ForeignKey('inventory_transaction.id'), nullable=True)
     inventory_transaction = relationship('InventoryTransaction', backref=backref('it_receiving', uselist=False, cascade='all, delete-orphan'))
 
+    # 组织
     organization_id = db.Column(Integer, ForeignKey('organization.id'))
     organization = relationship('Organization', foreign_keys=[organization_id])
 
@@ -54,6 +59,7 @@ class Receiving(db.Model, DataSecurityMixin):
 
     @hybrid_property
     def supplier(self):
+        """供应商"""
         return self.purchase_order.supplier
 
     @supplier.setter
@@ -201,6 +207,7 @@ class Receiving(db.Model, DataSecurityMixin):
         return self.receiving_in_draft()
 
     def receiving_in_draft(self):
+        """收货单处于草稿状态"""
         from psi.app.models import EnumValues
         draft_status = EnumValues.get(const.RECEIVING_DRAFT_STATUS_KEY)
         return self.status_id == draft_status.id

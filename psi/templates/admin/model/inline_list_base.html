@@ -55,6 +55,7 @@
     {% endfor %}
     {# template for new inline form fields #}
   </table>
+  {# 增加明细行 #}
   <div class="pull-right full-width">
     <a id="{{ field.id }}-button" href="javascript:void(0)" class="btn btn-default full-width btn-lg"
        onclick="addInlineField('{{ field.id }}');">{{ _gettext('Add') }}{{ field.label.text }}</a>

@@ -110,10 +110,12 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
     @hybrid_property
     def goods_amount(self):
+        """商品总计"""
         return format_decimal(Decimal(sum(line.total_amount for line in self.lines)))
 
     @goods_amount.expression
     def goods_amount(self):
+        """商品总计"""
         return (select([func.sum(PurchaseOrderLine.unit_price * PurchaseOrderLine.quantity)])
                 .where(self.id == PurchaseOrderLine.purchase_order_id)
                 .label('goods_amount'))
@@ -207,12 +209,15 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 class PurchaseOrderLine(db.Model):
     __tablename__ = 'purchase_order_line'
     id = Column(Integer, primary_key=True)
+    # 单价
     unit_price = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
+    # 数量
     quantity = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
 
     purchase_order_id = Column(Integer, ForeignKey('purchase_order.id'), nullable=False)
     purchase_order = relationship('PurchaseOrder', backref=backref('lines', cascade='all, delete-orphan'))
 
+    # 产品
     product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
     product = relationship('Product')
 

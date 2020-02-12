@@ -179,6 +179,7 @@ class BasePurchaseOrderAdmin(ModelViewWithAccess, DeleteValidator,
                 'Purchase order can not be update nor delete on issued status')
         )
 
+    # 行内model
     inline_models = (PurchaseOrderLineInlineAdmin(PurchaseOrderLine), )
 
     def after_model_change(self, form, model, is_created):

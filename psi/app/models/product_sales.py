@@ -10,6 +10,7 @@ from psi.app.utils import date_util
 
 
 class ProductSales(Product, ReportBaseModel):
+    """产品销售"""
 
     @staticmethod
     def sales_quantity_select():

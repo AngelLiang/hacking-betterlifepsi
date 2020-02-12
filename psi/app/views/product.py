@@ -95,6 +95,7 @@ class ProductAdmin(ModelViewWithAccess):
                            'distinguishing_feature',)
 
     def create_form(self, obj=None):
+        """创建表单"""
         from psi.app.models import ProductCategory, Supplier
         form = super(ProductAdmin, self).create_form(obj)
         form.images_placeholder.set_object_type(ProductImage)
@@ -103,6 +104,7 @@ class ProductAdmin(ModelViewWithAccess):
         return form
 
     def edit_form(self, obj=None):
+        """编辑表单"""
         from psi.app.models import ProductCategory, Supplier
         form = super(ProductAdmin, self).edit_form(obj)
         form.images_placeholder.set_object_type(ProductImage)

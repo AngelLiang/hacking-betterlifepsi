@@ -80,6 +80,7 @@ class Product(db.Model, DataSecurityMixin):
 
     @hybrid_property
     def images_placeholder(self):
+        """图片占位符"""
         return self.images
 
     @images_placeholder.setter
