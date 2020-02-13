@@ -3,6 +3,7 @@ from psi.app import const, service
 
 
 class PurchaseOrderService(object):
+    """订购单服务"""
     @staticmethod
     def create_expense_receiving(po):
         if po.status.code == const.PO_ISSUED_STATUS_KEY:

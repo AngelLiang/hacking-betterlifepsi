@@ -78,6 +78,7 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
     @hybrid_property
     def all_receivings(self):
+        """所有收货单"""
         return ''.join(r.__unicode__() + ", " for r in self.po_receivings)
 
     @all_receivings.expression
@@ -135,6 +136,7 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
         return result
 
     def get_available_lines_info(self):
+        """获取所有可用行信息"""
         # 1. Find all existing receiving bind with this PO.
         from psi.app.models import Receiving
         existing_res = Receiving.filter_by_po_id(self.id)
@@ -160,6 +162,7 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
     @staticmethod
     def all_lines_received(available_info):
+        """所有明细行已收货"""
         for line_id, line_info in available_info.items():
             if line_info['quantity'] > 0:
                 return False
@@ -167,6 +170,7 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
     @staticmethod
     def create_receiving_lines(available_info):
+        """创建收货单明细行"""
         from psi.app.models import ReceivingLine
         lines = []
         for line_id, info in available_info.items():
@@ -180,6 +184,7 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
     @staticmethod
     def get_received_quantities(existing_res):
+        """获取已收货的数量"""
         received_qtys = {}
         for re in existing_res:
             if re.lines is not None and len(re.lines) > 0:

@@ -180,6 +180,7 @@ def shipping_formatter(view, context, model, name):
 
 
 def purchase_order_formatter(view, context, model, name):
+    """采购单formatter"""
     s = model.purchase_order
     if s is not None:
         if user_has_role('purchase_price_view'):

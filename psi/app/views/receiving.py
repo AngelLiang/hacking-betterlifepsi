@@ -44,6 +44,7 @@ class ReceivingLineInlineAdmin(InlineFormAdmin):
 
 
 class ReceivingAdmin(ModelViewWithAccess, DeleteValidator, ModelWithLineFormatter):
+    """收货管理视图"""
     from .formatter import supplier_formatter, purchase_order_formatter, \
         inventory_transaction_formatter, default_date_formatter
     from psi.app.models import ReceivingLine, Receiving, PurchaseOrder
@@ -114,22 +115,29 @@ class ReceivingAdmin(ModelViewWithAccess, DeleteValidator, ModelWithLineFormatte
             return [product_field, quantity_field, price_field, total_amount_field]
 
     column_formatters = {
+        # 供应商
         'supplier': supplier_formatter,
+        # 订购单
         'purchase_order': purchase_order_formatter,
+        # 库存调整
         'inventory_transaction': inventory_transaction_formatter,
         'date': default_date_formatter,
         'lines': line_formatter
     }
 
     def on_model_delete(self, model):
+        """model删除事件"""
         super(ReceivingAdmin, self).on_model_delete(model)
         DeleteValidator.validate_status_for_change(model, const.RECEIVING_COMPLETE_STATUS_KEY,
                                                    gettext('Receiving document can not be update nor delete on complete status'))
 
     def on_model_change(self, form, model, is_created):
+        """model变动事件"""
         from psi.app.models import PurchaseOrder
         super(ReceivingAdmin, self).on_model_change(form, model, is_created)
+
         if is_created:
+            # 创建事件
             available_info = model.purchase_order.get_available_lines_info()
             # 4. Check any qty available for receiving?
             if PurchaseOrder.all_lines_received(available_info):
@@ -138,7 +146,7 @@ class ReceivingAdmin(ModelViewWithAccess, DeleteValidator, ModelWithLineFormatte
             if model.create_lines:
                 model.lines = PurchaseOrder.create_receiving_lines(available_info)
         model.operate_inv_trans_by_recv_status()
-        model.update_purchase_order_status()
+        model.update_purchase_order_status()  # 更新采购单状态
 
     def create_form(self, obj=None):
         from psi.app.models import EnumValues

@@ -118,7 +118,8 @@ class ModelViewWithAccess(ModelView):
     def on_model_change(self, form, model, is_created):
         if has_organization_field(self.model):
             if is_created:
-                model.organization = current_user.organization
+                # 创建事件
+                model.organization = current_user.organization  # 给model设置组织
             elif model.organization != current_user.organization:
                 # wtforms.ValidationError
                 ValidationError(gettext('You are not allowed to change this record'))

@@ -214,20 +214,25 @@ class Receiving(db.Model, DataSecurityMixin):
 
 
 class ReceivingLine(db.Model):
+    """收货单明细行"""
     __tablename = 'receiving_line'
     id = Column(Integer, primary_key=True)
     quantity = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
     price = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
 
+    # 产品
     product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
     product = relationship('Product', backref=backref('receiving_lines'))
 
+    # 收货单
     receiving_id = Column(Integer, ForeignKey('receiving.id'), nullable=False)
     receiving = relationship('Receiving', backref=backref('lines', uselist=True, cascade='all, delete-orphan'))
 
+    # 订购单
     purchase_order_line_id = Column(Integer, ForeignKey('purchase_order_line.id'), nullable=False)
     purchase_order_line = relationship('PurchaseOrderLine', backref=backref('pol_receiving_lines', uselist=True))
 
+    # 库存变动
     inventory_transaction_line_id = Column(Integer, ForeignKey('inventory_transaction_line.id'), nullable=True)
     inventory_transaction_line = relationship('InventoryTransactionLine', backref=backref('itl_receiving_line', uselist=False, cascade='all, delete-orphan'))
 

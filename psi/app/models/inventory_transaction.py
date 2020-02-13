@@ -15,12 +15,15 @@ db = Info.get_db()
 
 
 class InventoryTransaction(db.Model, DataSecurityMixin):
+    """库存调整"""
     __tablename__ = 'inventory_transaction'
     id = Column(Integer, primary_key=True)
     date = Column(DateTime, nullable=False)
+    # 库存变动类型
     type_id = Column(Integer, ForeignKey('enum_values.id'), nullable=False)
     type = relationship('EnumValues', foreign_keys=[type_id])
 
+    # 组织
     organization_id = db.Column(Integer, ForeignKey('organization.id'))
     organization = relationship('Organization', foreign_keys=[organization_id])
 
@@ -64,15 +67,22 @@ class InventoryTransaction(db.Model, DataSecurityMixin):
 
 
 class InventoryTransactionLine(db.Model):
+    """库存事务明细行"""
     __tablename = 'inventory_transaction_line'
     id = Column(Integer, primary_key=True)
+    # 在运输的数量
     in_transit_quantity = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=True)
     quantity = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=True)
+    # 产品
     product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
     product = relationship('Product', backref=backref('inventory_transaction_lines'))
+    # 价格
     price = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
+    # 可供出售的数量
     saleable_quantity = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=True)
+    # 备注
     remark = Column(Text)
+    # 库存事务
     inventory_transaction_id = Column(Integer, ForeignKey('inventory_transaction.id'), nullable=False)
     inventory_transaction = relationship('InventoryTransaction',
                                          backref=backref('lines', cascade='all, delete-orphan'))
