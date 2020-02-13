@@ -40,7 +40,7 @@ class Product(db.Model, DataSecurityMixin):
     lead_day = Column(Integer, nullable=False)
     distinguishing_feature = Column(Text)
     spec_link = Column(String(128))
-    # 进货价
+    # 默认进货价
     purchase_price = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
     # 零售价
     retail_price = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)

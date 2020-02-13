@@ -146,7 +146,7 @@ class BasePurchaseOrderAdmin(ModelViewWithAccess, DeleteValidator,
             form, model, is_created)
         if not security_util.user_has_role('purchase_price_view'):
             for l in model.lines:
-                l.unit_price = l.product.purchase_price
+                l.unit_price = l.product.purchase_price  # 设置产品单价
         DeleteValidator.validate_status_for_change(
             model, const.PO_RECEIVED_STATUS_KEY,
             gettext(
@@ -154,6 +154,7 @@ class BasePurchaseOrderAdmin(ModelViewWithAccess, DeleteValidator,
             ))
         if is_created:
             model.type = EnumValues.get(self.type_code)
+        # 创建收货单
         PurchaseOrderService.create_expense_receiving(model)
 
     def get_query(self):
