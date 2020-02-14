@@ -10,24 +10,29 @@ db = Info.get_db()
 
 
 class Expense(db.Model, DataSecurityMixin):
-    """支出"""
+    """消费支出"""
     __tablename__ = 'expense'
     id = Column(Integer, primary_key=True)
     date = Column(DateTime, nullable=False)
     amount = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
     has_invoice = Column(Boolean)
 
+    # 支出状态
     status_id = Column(Integer, ForeignKey('enum_values.id'), nullable=False)
     status = relationship('EnumValues', foreign_keys=[status_id])
 
+    # 支出类别
     category_id = Column(Integer, ForeignKey('enum_values.id'), nullable=False)
     category = relationship('EnumValues', foreign_keys=[category_id])
 
+    # 关联的采购单
     purchase_order_id = Column(Integer, ForeignKey('purchase_order.id'))
     purchase_order = relationship('PurchaseOrder', backref=backref('expenses', uselist=True, cascade='all, delete-orphan'))
+    # 关联的销售单
     sales_order_id = Column(Integer, ForeignKey('sales_order.id'))
     sales_order = relationship('SalesOrder', backref=backref('expense', uselist=False, cascade='all, delete-orphan'))
 
+    # 所属组织
     organization_id = db.Column(Integer, ForeignKey('organization.id'))
     organization = relationship('Organization', foreign_keys=[organization_id])
 

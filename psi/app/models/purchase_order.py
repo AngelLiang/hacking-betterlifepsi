@@ -18,17 +18,23 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
     """订购单"""
     __tablename__ = 'purchase_order'
     id = Column(Integer, primary_key=True)
+    # 逻辑金额：作为物流费用
     logistic_amount = Column(Numeric(precision=8, scale=2, decimal_return_scale=2))
+    # 订单时间
     order_date = Column(DateTime, nullable=False)
+    # 采购单
     supplier_id = Column(Integer, ForeignKey('supplier.id'), nullable=True)
     supplier = relationship('Supplier', backref=backref('purchaseOrders', lazy='dynamic'))
 
+    # 订单状态
     status_id = Column(Integer, ForeignKey('enum_values.id'), nullable=False)
     status = relationship('EnumValues', foreign_keys=[status_id])
 
+    # 订单类型
     type_id = Column(Integer, ForeignKey('enum_values.id'), nullable=False)
     type = relationship('EnumValues', foreign_keys=[type_id])
 
+    # 所属组织
     organization_id = db.Column(Integer, ForeignKey('organization.id'))
     organization = relationship('Organization', foreign_keys=[organization_id])
 
@@ -63,6 +69,7 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
     @hybrid_property
     def all_expenses(self):
+        """所有支出"""
         rep = ''
         for e in self.expenses:
             rep += str(e.id) + " - " + str(e.amount) + ", "
@@ -91,6 +98,7 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
     @hybrid_property
     def total_amount(self):
+        """总价"""
         if self.logistic_amount is None:
             l_a = 0
         else:
@@ -103,6 +111,7 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
     @total_amount.expression
     def total_amount(self):
+        """总价"""
         return self.goods_amount + self.logistic_amount
 
     @total_amount.setter
@@ -111,12 +120,11 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
     @hybrid_property
     def goods_amount(self):
-        """商品总计"""
+        """商品金额总计"""
         return format_decimal(Decimal(sum(line.total_amount for line in self.lines)))
 
     @goods_amount.expression
     def goods_amount(self):
-        """商品总计"""
         return (select([func.sum(PurchaseOrderLine.unit_price * PurchaseOrderLine.quantity)])
                 .where(self.id == PurchaseOrderLine.purchase_order_id)
                 .label('goods_amount'))
@@ -162,7 +170,7 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
     @staticmethod
     def all_lines_received(available_info):
-        """所有明细行已收货"""
+        """所有货物是否已到货"""
         for line_id, line_info in available_info.items():
             if line_info['quantity'] > 0:
                 return False
@@ -212,6 +220,7 @@ class PurchaseOrder(db.Model, DataSecurityMixin):
 
 
 class PurchaseOrderLine(db.Model):
+    """采购单明细行"""
     __tablename__ = 'purchase_order_line'
     id = Column(Integer, primary_key=True)
     # 单价
@@ -219,6 +228,7 @@ class PurchaseOrderLine(db.Model):
     # 数量
     quantity = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
 
+    # 采购单
     purchase_order_id = Column(Integer, ForeignKey('purchase_order.id'), nullable=False)
     purchase_order = relationship('PurchaseOrder', backref=backref('lines', cascade='all, delete-orphan'))
 
@@ -230,6 +240,7 @@ class PurchaseOrderLine(db.Model):
 
     @hybrid_property
     def total_amount(self):
+        """金额合计"""
         return format_decimal(self.unit_price * self.quantity)
 
     @total_amount.expression

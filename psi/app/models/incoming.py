@@ -9,6 +9,7 @@ db = Info.get_db()
 
 
 class Incoming(db.Model, DataSecurityMixin):
+    """收入"""
     __tablename__ = 'incoming'
     id = Column(Integer, primary_key=True)
     amount = Column(Numeric(precision=8, scale=2, decimal_return_scale=2), nullable=False)
