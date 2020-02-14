@@ -94,7 +94,9 @@ class Receiving(db.Model, DataSecurityMixin):
 
     @staticmethod
     def create_draft_recv_from_po(po):
+        """从采购单创建草稿收货单"""
         from psi.app.models.enum_values import EnumValues
+        # 收货单草稿状态
         recv_draft_status = EnumValues.get(const.RECEIVING_DRAFT_STATUS_KEY)
         purchase_in_trans_type = EnumValues.get(const.PURCHASE_IN_INV_TRANS_KEY)
         recv = Receiving()
@@ -103,6 +105,7 @@ class Receiving(db.Model, DataSecurityMixin):
         recv.organization = po.organization
         recv.status = recv_draft_status
         recv.supplier = po.supplier
+        # 库存事务
         from psi.app.models import InventoryTransaction
         trans = InventoryTransaction()
         trans.date = recv.date
@@ -116,6 +119,7 @@ class Receiving(db.Model, DataSecurityMixin):
             recv_l.product = line.product
             recv_l.quantity = line.quantity
             recv_l.purchase_order_line = line
+            # 库存事务行
             from psi.app.models import InventoryTransactionLine
             trans_l = InventoryTransactionLine()
             trans_l.price = recv_l.price

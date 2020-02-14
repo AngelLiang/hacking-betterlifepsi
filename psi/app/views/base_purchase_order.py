@@ -154,7 +154,7 @@ class BasePurchaseOrderAdmin(ModelViewWithAccess, DeleteValidator,
             ))
         if is_created:
             model.type = EnumValues.get(self.type_code)
-        # 创建收货单
+        # 创建支出和收货单
         PurchaseOrderService.create_expense_receiving(model)
 
     def get_query(self):

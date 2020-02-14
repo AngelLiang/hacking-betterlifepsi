@@ -6,7 +6,7 @@ class PurchaseOrderService(object):
     """订购单服务"""
     @staticmethod
     def create_expense_receiving(po):
-        """创建采购单后创建收货单"""
+        """创建支出和收货单"""
         if po.status.code == const.PO_ISSUED_STATUS_KEY:
             logistic_exp, goods_exp = PurchaseOrderService.create_expenses(po)
             db = service.Info.get_db()
