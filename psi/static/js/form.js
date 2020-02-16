@@ -4,6 +4,7 @@
 
 // When user clicks remove inline field icon
 // Reorder the inline orders and recalculate line number cell.
+// 移除不需要的行
 $('body').on('click', '.inline-remove-field' , function(e) {
     var inline_lines_tr = parent.find(".inline-field");
     for (i = 0; i < inline_lines_tr.length; i++){
@@ -31,12 +32,15 @@ function addInlineField(parent_id) {
 
     // Mark form that we just created
     $template.addClass('fresh');
-    $template.removeClass('hide');
+    $template.removeClass('hide');  // 移除 hide class
+    
     // Display line number for newly added line.
+    // 设置新的行号
     $('.line-number', $template).each(function(e) {
         var me = $(this);
-        me.html(inline_lines_tr.length + 1);
+        me.html(inline_lines_tr.length + 1);  // 行号+1
     });
+
     // Fix form IDs
     $('[name]', $template).each(function (e) {
         var me = $(this);
