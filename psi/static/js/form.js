@@ -31,7 +31,7 @@ function addInlineField(parent_id) {
     $template.attr('id', prefix);
 
     // Mark form that we just created
-    $template.addClass('fresh');
+    $template.addClass('fresh');  // 标志新行
     $template.removeClass('hide');  // 移除 hide class
     
     // Display line number for newly added line.
