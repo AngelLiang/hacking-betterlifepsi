@@ -10,9 +10,11 @@ from psi.app.utils import format_decimal, get_weeks_between
 db = Info.get_db()
 
 class ProductInventory(Product):
-    """产品库存"""
+    """产品库存，继承Product模型，添加一些方法
+    """
     @hybrid_property
     def inventory_advice(self):
+        """库存建议"""
         from psi.app.advice import InventoryAdvice
         return InventoryAdvice.advice(self)
 
@@ -26,6 +28,7 @@ class ProductInventory(Product):
 
     @hybrid_property
     def average_purchase_price(self):
+        """平均采购价格"""
         return self.cal_inv_trans_average(const.PURCHASE_IN_INV_TRANS_KEY)
 
     @average_purchase_price.setter
@@ -45,6 +48,7 @@ class ProductInventory(Product):
 
     @hybrid_property
     def average_retail_price(self):
+        """平均零售价格"""
         return self.cal_inv_trans_average(const.SALES_OUT_INV_TRANS_TYPE_KEY)
 
     @average_retail_price.setter
@@ -64,6 +68,7 @@ class ProductInventory(Product):
 
     @hybrid_property
     def average_unit_profit(self):
+        """平均单位利润"""
         if self.average_purchase_price != 0 and self.average_retail_price != 0:
             return self.average_retail_price - self.average_purchase_price
         return 0
@@ -107,6 +112,7 @@ class ProductInventory(Product):
 
     @hybrid_property
     def gross_profit_rate(self):
+        """毛利润"""
         if self.average_retail_price != 0 and self.average_purchase_price != 0:
             val = (self.average_retail_price - self.average_purchase_price)/self.average_purchase_price
             try:

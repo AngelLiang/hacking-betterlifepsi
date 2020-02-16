@@ -27,11 +27,11 @@ class Receiving(db.Model, DataSecurityMixin):
     status_id = Column(Integer, ForeignKey('enum_values.id'), nullable=False)
     status = relationship('EnumValues', foreign_keys=[status_id])
 
-    # 订购单
+    # 采购单
     purchase_order_id = Column(Integer, ForeignKey('purchase_order.id'), nullable=False)
     purchase_order = relationship('PurchaseOrder', backref=backref('po_receivings', uselist=True, ))
 
-    # 库存变动
+    # 库存事务
     inventory_transaction_id = Column(Integer, ForeignKey('inventory_transaction.id'), nullable=True)
     inventory_transaction = relationship('InventoryTransaction', backref=backref('it_receiving', uselist=False, cascade='all, delete-orphan'))
 
@@ -158,10 +158,13 @@ class Receiving(db.Model, DataSecurityMixin):
             return po
 
     def operate_inv_trans_by_recv_status(self):
+        """根据收货单状态调整库存"""
         inv_trans = None
         if self.status.code == const.RECEIVING_COMPLETE_STATUS_KEY:
+            # 收货单已完成
             inv_trans = self.save_inv_trans(inv_trans=self.inventory_transaction)
         elif self.status.code == const.RECEIVING_DRAFT_STATUS_KEY:
+            # 收货单草稿
             for line in self.lines:
                 line.price = line.purchase_order_line.unit_price
                 line.product_id = line.purchase_order_line.product_id
@@ -174,8 +177,10 @@ class Receiving(db.Model, DataSecurityMixin):
         return inv_trans
 
     def save_inv_trans(self, inv_trans):
+        """保存库存事务"""
         from psi.app.models import EnumValues, InventoryTransaction, InventoryTransactionLine
 
+        # 获取库存商品类型
         inv_type = EnumValues.get(const.PURCHASE_IN_INV_TRANS_KEY)
         if inv_trans is None:
             inv_trans = InventoryTransaction()
@@ -191,10 +196,12 @@ class Receiving(db.Model, DataSecurityMixin):
                 line.inventory_transaction_line = inv_line
             inv_line.price = line.price
             if self.status.code == const.RECEIVING_COMPLETE_STATUS_KEY:
+                # 收货单完成
                 inv_line.quantity = line.quantity
                 inv_line.in_transit_quantity = 0
                 inv_line.saleable_quantity = line.quantity
             elif self.status.code == const.RECEIVING_DRAFT_STATUS_KEY:
+                # 收货单草稿
                 inv_line.quantity = 0
                 inv_line.saleable_quantity = 0
                 inv_line.in_transit_quantity = line.quantity
@@ -232,7 +239,7 @@ class ReceivingLine(db.Model):
     receiving_id = Column(Integer, ForeignKey('receiving.id'), nullable=False)
     receiving = relationship('Receiving', backref=backref('lines', uselist=True, cascade='all, delete-orphan'))
 
-    # 订购单
+    # 订购单明细行
     purchase_order_line_id = Column(Integer, ForeignKey('purchase_order_line.id'), nullable=False)
     purchase_order_line = relationship('PurchaseOrderLine', backref=backref('pol_receiving_lines', uselist=True))
 

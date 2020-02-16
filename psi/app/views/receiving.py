@@ -62,6 +62,7 @@ class ReceivingAdmin(ModelViewWithAccess, DeleteValidator, ModelWithLineFormatte
     form_edit_rules = ('transient_po', 'status', 'date', 'remark', 'lines',)
 
     form_extra_fields = {
+        # 自动创建收货明细行
         'create_lines': BooleanField(label=lazy_gettext('Create Lines for unreceived products'),
                                      description=lazy_gettext('Create receiving lines based on '
                                                               'not yet received products in the purchase order')),

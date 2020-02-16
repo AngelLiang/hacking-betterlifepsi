@@ -109,6 +109,7 @@ class Product(db.Model, DataSecurityMixin):
 
     @hybrid_property
     def available_quantity(self):
+        """可用库存"""
         i_ts = self.inventory_transaction_lines
         total = 0
         if len(i_ts) > 0:

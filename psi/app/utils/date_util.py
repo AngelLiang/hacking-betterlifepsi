@@ -2,6 +2,11 @@ from datetime import datetime
 
 
 def years_ago(years, from_date=None):
+    """years年前
+
+    :pararm years: int
+    :param from_date:
+    """
     if from_date is None:
         from_date = datetime.now()
     try:
@@ -78,9 +83,9 @@ def get_last_quarter(month, year):
     :param year: given year
     :return: last quarter and it's year
     """
-    last_quarter = (month-1)//3 
+    last_quarter = (month-1)//3
     if last_quarter == 0:
-        last_quarter = 4 
+        last_quarter = 4
         last_year = year - 1
     else:
         last_year = year
