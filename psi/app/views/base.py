@@ -73,11 +73,13 @@ class ModelViewWithAccess(ModelView):
         return self.model.__tablename__
 
     def can(self, operation='view'):
-        """
+        """判断是否有权限操作
         :param operation: str, 操作
         """
+        # 获取对象ID和对象
         obj_id = get_mdict_item_or_list(request.args, 'id') if has_request_context() else None
         obj = None if obj_id is None else self.get_one(obj_id)
+        # 如果对象为空，则设置same_org=True
         if obj is None:
             same_org = True
         else:
@@ -85,6 +87,7 @@ class ModelViewWithAccess(ModelView):
                 if obj.organization is None:
                     same_org = False
                 else:
+                    # 判断该数据是否和用户是同一组织
                     same_org = (obj.organization.id == current_user.organization.id)
             else:
                 same_org = True
@@ -121,12 +124,14 @@ class ModelViewWithAccess(ModelView):
                 # 创建事件
                 model.organization = current_user.organization  # 给model设置组织
             elif model.organization != current_user.organization:
-                # wtforms.ValidationError
+                # 非同一组织的用户不能修改该数据
+                # wtforms.validate.ValidationError
                 ValidationError(gettext('You are not allowed to change this record'))
 
     def on_model_delete(self, model):
         if has_organization_field(model) and model.organization != current_user.organization:
-            # wtforms.ValidationError
+            # 非同一组织的用户不能删除该数据
+            # wtforms.validate.ValidationError
             ValidationError(gettext('You are not allowed to delete this record'))
 
     def _handle_view(self, name, **kwargs):

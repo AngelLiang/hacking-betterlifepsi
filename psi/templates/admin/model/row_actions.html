@@ -16,7 +16,7 @@
 
 {% macro view_row(action, row_id, row) %}
   {%- if admin_view.can_view_details -%}
-      {% if row.can_view_details() %}
+      {% if row.can_view_details() %}  {# 添加权限判断 #}
         {%- if admin_view.details_modal -%}
           {{ view_row_popup(action, row_id, row) }}
         {% else %}
@@ -28,7 +28,7 @@
 
 {% macro edit_row(action, row_id, row) %}
   {%- if admin_view.can_edit -%}
-      {% if row.can_edit() %}
+      {% if row.can_edit() %}  {# 添加权限判断 #}
           {%- if admin_view.edit_modal -%}
             {{ edit_row_popup(action, row_id, row) }}
           {% else %}
@@ -40,7 +40,7 @@
 
 {% macro delete_row(action, row_id, row) %}
   {%- if admin_view.can_delete -%}
-    {% if row.can_delete() %}
+    {% if row.can_delete() %}  {# 添加权限判断 #}
       <form class="icon" method="POST" action="{{ get_url('.delete_view') }}">
         {{ delete_form.id(value=get_pk_value(row)) }}
         {{ delete_form.url(value=return_url) }}
